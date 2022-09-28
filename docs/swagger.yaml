@@ -1,0 +1,813 @@
+definitions:
+  Album:
+    properties:
+      albumCover:
+        type: string
+      commentCount:
+        type: integer
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      likeCount:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  Comment:
+    properties:
+      album:
+        $ref: '#/definitions/Album'
+      album_id:
+        type: integer
+      comment:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      photo:
+        $ref: '#/definitions/Photo'
+      photo_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  CommentRequest:
+    properties:
+      album_id:
+        type: integer
+      comment_text:
+        type: string
+      photo_id:
+        type: integer
+    type: object
+  LikeRequest:
+    properties:
+      album_id:
+        type: integer
+      photo_id:
+        type: integer
+    type: object
+  LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  Photo:
+    properties:
+      album_id:
+        type: integer
+      commentCount:
+        type: integer
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      likeCount:
+        type: integer
+      url_image:
+        type: string
+    type: object
+  Token:
+    properties:
+      createdAt:
+        type: string
+      expiresAt:
+        type: string
+      token:
+        type: string
+      userID:
+        type: integer
+    type: object
+  User:
+    properties:
+      biography:
+        type: string
+      birth:
+        type: string
+      created_at:
+        type: string
+      ddd:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      updated_at:
+        type: string
+      urlImage:
+        type: string
+      username:
+        type: string
+    type: object
+  UserCreateRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  UserCreateResponse:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+paths:
+  /album:
+    post:
+      consumes:
+      - application/json
+      description: '- Create an album'
+      parameters:
+      - description: Album to be created
+        in: body
+        name: Album
+        required: true
+        schema:
+          $ref: '#/definitions/Album'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Album'
+      security:
+      - ApiKeyAuth: []
+      summary: '- Create album'
+      tags:
+      - '- Album'
+    put:
+      consumes:
+      - application/json
+      description: '- Update an album'
+      parameters:
+      - description: Album to be updated
+        in: body
+        name: Album
+        required: true
+        schema:
+          $ref: '#/definitions/Album'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Album'
+      security:
+      - ApiKeyAuth: []
+      summary: '- Update album'
+      tags:
+      - '- Album'
+  /album/{id}:
+    delete:
+      consumes:
+      - application/x-json-stream
+      description: '- Delete an album'
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: '- Delete album'
+      tags:
+      - '- Album'
+    get:
+      consumes:
+      - application/json
+      description: '- Get an album by id'
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Album'
+      security:
+      - ApiKeyAuth: []
+      summary: '- Get one album'
+      tags:
+      - '- Album'
+  /album/upload/{album_id}/{photo_id}:
+    post:
+      consumes:
+      - application/json
+      description: '- upload an album cover'
+      parameters:
+      - description: album_id
+        in: path
+        name: album_id
+        required: true
+        type: integer
+      - description: photo_id
+        in: path
+        name: photo_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: '- upload an album cover'
+      tags:
+      - '- Album'
+  /album/user/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: '- Get all albums of the user'
+      parameters:
+      - description: user_id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - description: limit per page
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: number of page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: search sort
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Album'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: '- Get albums'
+      tags:
+      - '- Album'
+  /auth:
+    post:
+      consumes:
+      - application/json
+      description: '- Authenticate the user giving a token of Authorization'
+      parameters:
+      - description: User to be connected
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Token'
+      summary: '- Authenticate user'
+      tags:
+      - '- Login'
+  /comment:
+    post:
+      consumes:
+      - application/json
+      description: '- create a comments'
+      parameters:
+      - description: comment data
+        in: body
+        name: Comment
+        required: true
+        schema:
+          $ref: '#/definitions/CommentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: '- create a comments'
+      tags:
+      - '- Comment'
+  /comment/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: '- delete a comments'
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: '- delete a comments'
+      tags:
+      - '- Comment'
+  /comment/{photo_id}:
+    get:
+      consumes:
+      - application/json
+      description: '- get all comments'
+      parameters:
+      - description: photo_id
+        in: path
+        name: photo_id
+        required: true
+        type: integer
+      - description: limit per page
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: number of page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: search sort
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Comment'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: '- get all comments'
+      tags:
+      - '- Comment'
+  /comment/album/{album_id}:
+    get:
+      consumes:
+      - application/json
+      description: '- get all comments'
+      parameters:
+      - description: album_id
+        in: path
+        name: album_id
+        required: true
+        type: integer
+      - description: limit per page
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: number of page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: search sort
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Comment'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: '- get all comments'
+      tags:
+      - '- Comment'
+  /feed:
+    get:
+      consumes:
+      - application/json
+      description: '- feed'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: '- check authorization'
+      tags:
+      - '- Feed'
+  /like:
+    post:
+      consumes:
+      - application/json
+      description: '- give a likes'
+      parameters:
+      - description: Like to be created
+        in: body
+        name: Like
+        required: true
+        schema:
+          $ref: '#/definitions/LikeRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: '- give a likes'
+      tags:
+      - '- Like'
+  /like/{album_id}/album:
+    get:
+      consumes:
+      - application/json
+      description: '- show all likes of the albums'
+      parameters:
+      - description: album_id
+        in: path
+        name: album_id
+        required: true
+        type: integer
+      - description: limit per page
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: number of page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: search sort
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: '- show all likes of the albums'
+      tags:
+      - '- Like'
+  /like/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: '- delete a likes'
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: '- delete a likes'
+      tags:
+      - '- Like'
+  /like/photo/{photo_id}:
+    get:
+      consumes:
+      - application/json
+      description: '- show all likes of the photos'
+      parameters:
+      - description: photo_id
+        in: path
+        name: photo_id
+        required: true
+        type: integer
+      - description: limit per page
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: number of page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: search sort
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: '- show all likes of the photos'
+      tags:
+      - '- Like'
+  /photo/{album_id}:
+    get:
+      consumes:
+      - application/json
+      description: '- get all photos by album'
+      parameters:
+      - description: album_id
+        in: path
+        name: album_id
+        required: true
+        type: integer
+      - description: limit per page
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: number of page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: search sort
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Photo'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: '- get all photos'
+      tags:
+      - '- Photo'
+    post:
+      consumes:
+      - multipart/form-data
+      description: '- Upload a photo'
+      parameters:
+      - description: album_id
+        in: path
+        name: album_id
+        required: true
+        type: integer
+      - description: upload your file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: '- Upload photo'
+      tags:
+      - '- Photo'
+  /photo/{photo_id}:
+    delete:
+      consumes:
+      - application/json
+      description: '- delete a photo'
+      parameters:
+      - description: photo_id
+        in: path
+        name: photo_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: '- delete a photo'
+      tags:
+      - '- Photo'
+  /photo/album/{photo_id}:
+    get:
+      consumes:
+      - application/json
+      description: '- get photo by id'
+      parameters:
+      - description: photo_id
+        in: path
+        name: photo_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Photo'
+      security:
+      - ApiKeyAuth: []
+      summary: '- get photo'
+      tags:
+      - '- Photo'
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: '- Create a user'
+      parameters:
+      - description: User to be created
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/UserCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/UserCreateResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: '- Create user'
+      tags:
+      - '- User'
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: '- Delete a user by id'
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: '- Delete user'
+      tags:
+      - '- User'
+    get:
+      consumes:
+      - application/json
+      description: Get user by id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+      security:
+      - ApiKeyAuth: []
+      summary: '- Get one user'
+      tags:
+      - '- User'
+    put:
+      consumes:
+      - application/json
+      description: '- Update a user by id'
+      parameters:
+      - description: User to be updated
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+      security:
+      - ApiKeyAuth: []
+      summary: '- Update user'
+      tags:
+      - '- User'
+  /user/upload/{id}:
+    post:
+      consumes:
+      - application/json
+      description: '- upload a profile picture'
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: upload your file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: '- upload a profile picture'
+      tags:
+      - '- User'
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
